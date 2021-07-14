@@ -9,8 +9,8 @@ export function decrement() {
 }
 
 export function asyncIncrement() {
-    dispatch(disableButtons())
     return function(dispatch) {
+        dispatch(disableButtons())
         setTimeout(() => {
             dispatch({type: ASYNC_INCREMENT})
             dispatch(enableButtons())

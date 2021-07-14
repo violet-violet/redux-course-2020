@@ -1,4 +1,5 @@
-import { applyMiddleware, createStore } from 'redux'
+import { applyMiddleware, compose, createStore } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import logger from 'redux-logger'
 import thunk from 'redux-thunk'
 import { asyncIncrement, changeTheme, decrement, increment } from './redux/actions'
@@ -11,19 +12,12 @@ const counter = document.getElementById('counter'),
       asyncBtn = document.getElementById('async'),
       themeBtn = document.getElementById('theme')
 
-// function logger(state) {
-//     return function(next) {
-//         return function(action) {
-//             console.log('Prev State: ', state.getState());
-//             console.log('action: ', action);
-//             const newState = next(action)
-//             console.log('State: ', newState);
-//             return newState
-//         }
-//     }
-// }
-
-const store = createStore(rootReducer, applyMiddleware(thunk, logger))
+const store = createStore(
+    rootReducer, 
+    composeWithDevTools(
+        applyMiddleware(thunk, logger),
+    )
+)
 
 addBtn.addEventListener('click', () => {
     store.dispatch(increment())
@@ -47,7 +41,7 @@ themeBtn.addEventListener('click', () => {
 store.subscribe(() => {
     const state = store.getState()
     counter.textContent = state.counter
-    document.body.className = state.theme.value
+    document.body.className = state.theme.value;
 
     [addBtn, subBtn, asyncBtn, themeBtn].forEach((btn) => (
         btn.disabled = state.theme.disabled
