@@ -48,6 +48,10 @@ store.subscribe(() => {
     const state = store.getState()
     counter.textContent = state.counter
     document.body.className = state.theme.value
+
+    [addBtn, subBtn, asyncBtn, themeBtn].forEach((btn) => (
+        btn.disabled = state.theme.disabled
+    ))
 })
 
 store.dispatch({type: 'init_application'})
